@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header {
+            padding: 20px;
+        }
+        
+        .content {
+            height: calc(100vh - 60px); /* 确保内容区域高度适应屏幕 */
+            overflow-y: auto;
+        }
+        
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            color: rgb(58, 55, 55);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 999;
+            height: 60px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav a {
+            color: rgb(58, 55, 55);
+            text-decoration: none;
+            font-size: 15px;
+
+        }
+
+        .nav img {
+            width: 35px;
+            height: 35px;
+        }
+        
+        .page {
+            display: none;
+            height: calc(100vh - 60px); /* 确保内容区域高度适应屏幕 */
+        }
+        
+        .active {
+            display: block;
+        }
+        .nav .text-active{
+            color: #027CFF;
+        }
+        
+    </style>
+</head>
+<body>
+       
+    <div class="content">
+        <div id="home" class="page active">
+            <!-- 在这里放置首页内容 -->
+            <object data="component/home.html" type="text/html" width="100%" height="100%"></object>
+        </div>
+        <div id="group" class="page">
+            <!-- 在这里放置群组内容 -->
+            <h2>群组页面</h2>
+        </div>
+        <div id="notice" class="page">
+            <!-- 在这里放置公告内容 -->
+            <h2>公告页面</h2>
+        </div>
+        <div id="mine" class="page">
+            <!-- 在这里放置个人中心内容 -->
+            <h2>个人中心页面</h2>
+        </div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-item">
+            <img src="../images/home_act.png" data-active="../images/home_act.png" data-ina="../images/home_ina.png" alt="">
+            <a data-name="#home" class="text-active">首页</a>
+        </div>
+        
+        <div class="nav-item">
+            <img src="../images/ina_qun.png"  data-active="../images/ac_qun.png" data-ina="../images/ina_qun.png" alt="">
+            <a data-name="#group">群组</a>
+        </div>
+        
+        <div class="nav-item">
+            <img src="../images/mes_ina.png"  data-active="../images/mes_act.png" data-ina="../images/mes_ina.png"  alt="">
+            <a data-name="#notice">公告</a>
+        </div>
+        
+        <div class="nav-item">
+            <img src="../images/my_ina.png"  data-active="../images/my_act.png" data-ina="../images/my_ina.png" alt="">
+            <a data-name="#mine">我的</a>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.nav-item').forEach(navItem=>{
+            navItem.addEventListener('click', function(e) {
+                e.preventDefault();
+                let a = this.querySelector("a");
+                let img = this.querySelector('img');
+                console.log("点击",a.getAttribute('data-name'))
+                var targetPage = document.querySelector(a.getAttribute('data-name'));
+                Array.from(document.querySelectorAll('.page')).forEach((page) => {
+                    page.classList.remove('active');
+                });
+                targetPage.classList.add('active');
+                document.querySelectorAll(".nav-item img").forEach((i) => {
+                    i.src = i.getAttribute('data-ina');
+                });
+                document.querySelectorAll(".nav-item a").forEach((navA) => {
+                    navA.removeAttribute("class")
+                });
+                img.src = img.getAttribute('data-active');
+                a.className = "text-active"
+                
+            
+            });
+        })
+    </script>
+</body>
+</html>
