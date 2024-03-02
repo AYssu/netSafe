@@ -5,45 +5,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
-        
-        .nav {
-            display: flex;
-        }
-        .nav-item {
-            width: 25%;
-            height: 100px;
+
+        .active {
+            color: #1184ff;
         }
 
-        .nav-item>img {
-            width: 100px;
-            height: 100px;
+        .footer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            /* 创建四列，每列宽度相等 */
+            /* grid-gap: 10px; */
+            /* 格子之间的间距 */
+            background-color: #fff;
+            /* 背景颜色 */
+            color: #fff;
+            /* 文本颜色 */
+            padding: 15px 0px;
+            /* 内边距 */
+            text-align: center;
+            /* 文本居中 */
+            position: fixed;
+            /* 固定位置 */
+            bottom: 0;
+            /* 固定在底部 */
+            width: 100%;
+            /* 宽度占满整个容器 */
+            box-shadow: -2px -2px 5px #e7e7e7;
+
         }
 
+      
+        a {
+            text-decoration: none;
+            color: #3a3737;
+            font-size: 15px;
+        }
+        .footer-item {
+            display: grid;
+            place-items: center;
+
+        }
+
+        .footer-item>a {
+            margin-top: 5px;
+        }
+
+        .footer>.footer-item>img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .page {
+            height: calc(100vh - 60px);
+            /* 确保内容区域高度适应屏幕 */
+        }
+
+        #group {
+            display: none;
+        }
+
+        #notice {
+            display: none;
+        }
+
+        #mine {
+            display: none;
+        }
     </style>
+    <script src="../js/jquery-3.7.1.min.js"></script>
 </head>
 
 <body>
+
     <div class="content">
-
-    </div>
-
-    <div class="nav">
-        <div class="nav-item">
-            <img src="../images/home_ina.png" alt="主页">
+        <div id="home" class="page">
+            <!-- 在这里放置首页内容 -->
+            <object data="component/home.html" type="text/html" width="100%" height="100%"></object>
         </div>
-        <div class="nav-item"></div>
-        <div class="nav-item"></div>
-        <div class="nav-item"></div>
+        <div id="group" class="page">
+            <!-- 在这里放置群组内容 -->
+            <h2>群组页面</h2>
+        </div>
+        <div id="notice" class="page">
+            <!-- 在这里放置公告内容 -->
+            <h2>公告页面</h2>
+        </div>
+        <div id="mine" class="page">
+            <!-- 在这里放置个人中心内容 -->
+            <h2>个人中心页面</h2>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer-item" data-page="home">
+            <img src="../images/home_act.png" alt="主页">
+            <a href="#" class="active">首页</a>
+        </div>
+        <div class="footer-item" data-page="group">
+            <img src="../images/ina_qun.png" alt="">
+            <a href="#" class="">群组</a>
+        </div>
+        <div class="footer-item" data-page="message">
+            <img src="../images/mes_ina.png" alt="主页">
+            <a href="#" class="">公告</a>
+        </div>
+        <div class="footer-item" data-page="mine">
+            <img src="../images/my_ina.png" alt="主页">
+            <a href="#" class="">我的</a>
+        </div>
     </div>
 
     <script>
-
+        $(function () {
+            let items = ["home","group","message","mine"]
+            $(".footer-item").each(function () {
+                $(this).click(function () {
+                    let attribute = this.getAttribute("data-page");
+                    let index = items.findIndex(attribute);
+                })
+            })
+        })
     </script>
 </body>
 
