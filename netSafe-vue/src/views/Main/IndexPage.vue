@@ -1,4 +1,4 @@
-<script setup >
+<script setup>
 import homePersion from '@/assets/images/home_person.png'
 import tongz from '@/assets/images/tongz.png'
 import back from '@/assets/images/back_icon.png'
@@ -9,20 +9,20 @@ import line from '@/assets/images/xiansuo.png'
 
 <template>
   <div class="topbar">
-    <img :src="homePersion" alt="">
+    <img :src="homePersion" alt="" />
     <span>欢迎您，阿夜</span>
   </div>
   <div class="msgBox">
     <div class="msg">
       <div class="leftBox">
-        <img :src="tongz" alt="通知">
+        <img :src="tongz" alt="通知" />
       </div>
       <div class="centerBox">
         <span class="msgTit">阿丽给你发送了一条消息</span>
         <span class="time">2019-01-01 12:00:00</span>
       </div>
       <div class="rightBox">
-        <img :src="back" alt="">
+        <img :src="back" alt="" />
       </div>
     </div>
   </div>
@@ -30,16 +30,16 @@ import line from '@/assets/images/xiansuo.png'
     <h3>常用功能</h3>
   </div>
   <div class="centerFunBox">
-      <div class="fun_items bkorigin">
-        <img :src="report" alt="报警">
-        <span>一键报警</span>
-        <img :src="more" alt="更多">
-      </div>
-      <div class="fun_items bkskyblue">
-        <img :src="line" alt="线索">
-        <span>线索征集</span>
-        <img :src="more" alt="更多">
-      </div>
+    <div class="fun_items bkorigin">
+      <img :src="report" alt="报警" />
+      <span>一键报警</span>
+      <img :src="more" alt="更多" />
+    </div>
+    <div class="fun_items bkskyblue">
+      <img :src="line" alt="线索" />
+      <span>线索征集</span>
+      <img :src="more" alt="更多" />
+    </div>
   </div>
 </template>
 
@@ -53,7 +53,7 @@ import line from '@/assets/images/xiansuo.png'
   height: 130px;
   width: 100vw;
 }
-.topbar>span {
+.topbar > span {
   box-sizing: border-box;
   display: flex;
   align-items: flex-end;
@@ -61,9 +61,8 @@ import line from '@/assets/images/xiansuo.png'
   padding-left: 8px;
   font-size: 23px;
   color: white;
-
 }
-.topbar>img {
+.topbar > img {
   width: 60px;
   height: 60px;
 }
@@ -73,7 +72,7 @@ import line from '@/assets/images/xiansuo.png'
   height: 70px;
   padding: 10px;
 }
-.msgBox>.msg{
+.msgBox > .msg {
   width: 100%;
   height: 100%;
   display: grid;
@@ -88,13 +87,12 @@ import line from '@/assets/images/xiansuo.png'
   box-sizing: border-box;
   padding-left: 10px;
 }
-.leftBox>img{
+.leftBox > img {
   width: 30px;
   height: 30px;
-  
-} 
+}
 .centerBox {
-  display:grid;
+  display: grid;
   grid-template-rows: auto auto;
   width: 100%;
 }
@@ -105,7 +103,7 @@ import line from '@/assets/images/xiansuo.png'
   display: flex;
   justify-content: flex-end;
 }
-.rightBox>img {
+.rightBox > img {
   width: 20px;
   height: 20px;
 }
@@ -129,9 +127,8 @@ import line from '@/assets/images/xiansuo.png'
   width: 100%;
   max-height: 1000px;
   padding: 10px 20px;
-
 }
-.centerFunBox>.fun_items{
+.centerFunBox > .fun_items {
   width: 100%;
   height: 110px;
   border-radius: 20px;
@@ -143,13 +140,12 @@ import line from '@/assets/images/xiansuo.png'
   grid-template-columns: 15% 70% 15%;
   padding-left: 20px;
   padding-right: 10px;
-
 }
-.fun_items>img {
-    width: 40px;
-    height: 40px;
+.fun_items > img {
+  width: 40px;
+  height: 40px;
 }
-.fun_items>span {
+.fun_items > span {
   width: 100%;
   color: white;
   font-size: 20px;

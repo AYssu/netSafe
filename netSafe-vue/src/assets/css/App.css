@@ -1,0 +1,51 @@
+/* 定义底部导航栏的样式 */
+a {
+  text-decoration: none;
+  color: #3a3737;
+  font-size: 15px;
+}
+
+footer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* 创建四列，每列宽度相等 */
+  /* grid-gap: 10px; */
+  /* 格子之间的间距 */
+  background-color: #fff;
+  /* 背景颜色 */
+  color: #fff;
+  /* 文本颜色 */
+  padding: 15px 0px;
+  /* 内边距 */
+  text-align: center;
+  /* 文本居中 */
+  position: fixed;
+  /* 固定位置 */
+  bottom: 0;
+  /* 固定在底部 */
+  width: 100%;
+  /* 宽度占满整个容器 */
+  box-shadow: -2px -2px 5px #e7e7e7;
+}
+
+.footer-item {
+  display: grid;
+  place-items: center;
+}
+
+.footer-item > span {
+  margin-top: 5px;
+}
+
+.footer-item > a {
+  margin-top: 5px;
+}
+
+footer > .footer-item > img {
+  width: 30px;
+  height: 30px;
+}
+
+.active {
+  color: #1385ff;
+}
