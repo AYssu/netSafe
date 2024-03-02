@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { RouterView } from 'vue-router'
 import { ref } from 'vue'
 
@@ -12,18 +12,18 @@ import groupIcon_active from '@/assets/images/ac_qun.png'
 import announcementIcon_active from '@/assets/images/mes_act.png'
 import myIcon_active from '@/assets/images/my_act.png'
 
-import { useUserInfoStore } from '@/stores/user.ts'
+import { useUserInfoStore } from '@/stores/user.js'
 const userInfoStore = useUserInfoStore();
 
  
-const activeBar = ref<Record<string, string>>({
+const activeBar = ref({
   home: homeIcon,
   group: grgroupIcon,
   announcement: announcementIcon,
   my: myIcon,
 });
 
-const activeIconMap = ref<Record<string, string>>({
+const activeIconMap = ref({
   home: homeIcon_active,
   group: groupIcon_active,
   announcement: announcementIcon_active,
@@ -31,10 +31,11 @@ const activeIconMap = ref<Record<string, string>>({
 })
 import { onMounted } from 'vue'
 onMounted(() => {
-    activeBar.value.home = activeIconMap.value.home
+    activeBar.value.home = activeIconMap.value.home;
+    
 })
 
-const changeIcon = (iconType: string) => {  
+const changeIcon = (iconType) => {  
   activeBar.value.home = homeIcon;
   activeBar.value.group = grgroupIcon;
   activeBar.value.announcement = announcementIcon;
@@ -54,7 +55,7 @@ const changeIcon = (iconType: string) => {
     <main>
       <RouterView></RouterView> 
     </main>
-    <footer v-if="userInfoStore.info!=null">
+    <footer v-if="userInfoStore.info.id!=null">
       <router-link class="footer-item" to="/index" active-class="active" @click="changeIcon('home')">
         <img :src="activeBar.home" alt="主页">
         <span>首页</span>

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import homePersion from '@/assets/images/home_person.png'
 import tongz from '@/assets/images/tongz.png'
 import back from '@/assets/images/back_icon.png'
