@@ -2,6 +2,9 @@
 import homePersion from '@/assets/images/home_person.png'
 import tongz from '@/assets/images/tongz.png'
 import back from '@/assets/images/back_icon.png'
+import report from '@/assets/images/call.png'
+import more from '@/assets/images/more.png'
+import line from '@/assets/images/xiansuo.png'
 </script>
 
 <template>
@@ -25,6 +28,18 @@ import back from '@/assets/images/back_icon.png'
   </div>
   <div class="funBox">
     <h3>常用功能</h3>
+  </div>
+  <div class="centerFunBox">
+      <div class="fun_items bkorigin">
+        <img :src="report" alt="报警">
+        <span>一键报警</span>
+        <img :src="more" alt="更多">
+      </div>
+      <div class="fun_items bkskyblue">
+        <img :src="line" alt="线索">
+        <span>线索征集</span>
+        <img :src="more" alt="更多">
+      </div>
   </div>
 </template>
 
@@ -104,5 +119,40 @@ import back from '@/assets/images/back_icon.png'
   padding: 0 10px;
   width: 100%;
   overflow: hidden;
+}
+
+.centerFunBox {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 15px;
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 1000px;
+  padding: 10px 20px;
+
+}
+.centerFunBox>.fun_items{
+  width: 100%;
+  height: 110px;
+  border-radius: 20px;
+}
+.fun_items {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  grid-template-columns: 15% 70% 15%;
+  padding-left: 20px;
+  padding-right: 10px;
+
+}
+.fun_items>img {
+    width: 40px;
+    height: 40px;
+}
+.fun_items>span {
+  width: 100%;
+  color: white;
+  font-size: 20px;
+  margin-left: 15px;
 }
 </style>

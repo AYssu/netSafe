@@ -2,16 +2,20 @@
 import { RouterView } from 'vue-router'
 import { ref } from 'vue'
 
-import homeIcon from './assets/images/home_ina.png'
-import grgroupIcon from './assets/images/ina_qun.png'
-import announcementIcon from './assets/images/mes_ina.png'
-import myIcon from './assets/images/my_ina.png'
+import homeIcon from '@/assets/images/home_ina.png'
+import grgroupIcon from '@/assets/images/ina_qun.png'
+import announcementIcon from '@/assets/images/mes_ina.png'
+import myIcon from '@/assets/images/my_ina.png'
 
-import homeIcon_active from './assets/images/home_act.png'
-import groupIcon_active from './assets/images/ac_qun.png'
-import announcementIcon_active from './assets/images/mes_act.png'
-import myIcon_active from './assets/images/my_act.png'
+import homeIcon_active from '@/assets/images/home_act.png'
+import groupIcon_active from '@/assets/images/ac_qun.png'
+import announcementIcon_active from '@/assets/images/mes_act.png'
+import myIcon_active from '@/assets/images/my_act.png'
 
+import { useUserInfoStore } from '@/stores/user.ts'
+const userInfoStore = useUserInfoStore();
+
+ 
 const activeBar = ref<Record<string, string>>({
   home: homeIcon,
   group: grgroupIcon,
@@ -48,9 +52,9 @@ const changeIcon = (iconType: string) => {
   <div id="app">
     <header></header>
     <main>
-      <RouterView></RouterView> <!-- 这里会显示当前路由对应的组件 -->
+      <RouterView></RouterView> 
     </main>
-    <footer>
+    <footer v-if="userInfoStore.info!=null">
       <router-link class="footer-item" to="/index" active-class="active" @click="changeIcon('home')">
         <img :src="activeBar.home" alt="主页">
         <span>首页</span>

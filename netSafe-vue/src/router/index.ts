@@ -1,17 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'  
-import HomeView from '../views/HomeView.vue'  
 import IndexPageVue from '@/views/Main/IndexPage.vue'  
 import GroupListVue from '@/views/Main/GroupList.vue'  
 import PersonalCenterVue from '@/views/Main/PersonalCenter.vue'  
 import MainPortalVue from '@/views/Main/MainPortal.vue'  
-  
+
+import LoginLayoutVue from '@/views/LoginLayout.vue'
+
 const routes = [  
-  { path: '/', name: 'Home', component: HomeView },  
+  { path: '/', name: 'Login', component: LoginLayoutVue},  
   { path: '/index', name: 'IndexPage', component: IndexPageVue },  
   { path: '/group', name: 'GroupList', component: GroupListVue },  
   { path: '/personal', name: 'PersonalCenter', component: PersonalCenterVue },  
   { path: '/portal', name: 'MainPortal', component: MainPortalVue },  
-]  
+]
   
 const router = createRouter({  
   history: createWebHistory(import.meta.env.BASE_URL),  

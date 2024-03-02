@@ -9,6 +9,8 @@
       {
         "document-title": "off"
       }
-    ]
+    ],
+    "typescript-config/strict": "off",
+    "typescript-config/consistent-casing": "off"
   }
 }
