@@ -1,75 +1,90 @@
 .register-main {
-    background-color: white;
+  background-color: white;
+  width: 100vw;
+  height: 100vh;
+
+  .topbar {
     width: 100vw;
-    height: 100vh;
+    height: 100px;
+    display: flex;
+    align-items: center;
+  }
 
-    .topbar {
-        width: 100vw;
-        height: 100px;
-        display: flex;
-        align-items: center;
-    }
+  .topbar > span {
+    margin-left: 50px;
+    font-size: 19px;
+    font-weight: bold;
+    margin-top: 50px;
+  }
 
-    .topbar>span {
-        margin-left: 50px;
-        font-size: 19px;
-        font-weight: bold;
-        margin-top: 50px;
-    }
-    .form-content {
-        padding: 0 50px;
-    }
-    .item-input {
-        height: 100px;
-        border-bottom: rgba(128, 128, 128, 0.363) 1px solid;
-    }
+  .form-content {
+    padding: 0 50px;
+  }
 
-    .item-input {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
+  .item-input {
+    height: 100px;
+    border-bottom: rgba(128, 128, 128, 0.363) 1px solid;
+  }
 
-    .input-top-box {
-        display: flex;
-        align-items: center;
-    }
+  .item-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-    .input-top-box>img {
-        width: 30px;
-        height: 30px;
-    }
+  .input-top-box {
+    display: flex;
+    align-items: center;
+  }
 
-    .input-top-box>span {
-        margin-left: 15px;
-        font-weight: bold;
-    }
+  .input-top-box > img {
+    width: 30px;
+    height: 30px;
+  }
 
-    .input-top-box>img {
-        width: 20px;
-        height: 20px;
-    }
+  .input-top-box > span {
+    margin-left: 15px;
+    font-weight: bold;
+  }
 
-    .input-bottom-box {
-        display: flex;
-        justify-content: space-between;
-    }
+  .input-top-box > img {
+    width: 20px;
+    height: 20px;
+  }
 
-    .input-bottom-box>img {
-        width: 25px;
-        height: 25px;
-        margin-right: 10px;
-    }
+  .input-bottom-box {
+    display: flex;
+    justify-content: space-between;
+  }
 
-    .input-bottom-box>input {
-        background-color: #ffffff;
-        border: none;
-        margin-top: 15px;
-        width: 70%;
-        outline: none;
-    }
+  .input-bottom-box > span {
+    display: flex;
+    font-size: 13px;
+    align-items: end;
+  }
 
-    
+  .input-bottom-box > img {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+  }
+
+  .input-bottom-box > input {
+    background-color: #ffffff;
+    border: none;
+    margin-top: 15px;
+    width: 60%;
+    outline: none;
+  }
+
+  .el-select__wrapper {
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .el-select__wrapper.is-hovering:not(.is-focused) {
+    box-shadow: none;
+  }
   .login-btn-box {
     box-sizing: border-box;
     padding: 50px 50px;
@@ -77,7 +92,7 @@
     grid-template-rows: auto;
   }
 
-  .login-btn-box>input {
+  .login-btn-box > input {
     height: 45px;
     border: none;
     border-radius: 20px;
@@ -90,9 +105,25 @@
     box-shadow: 0 1px 2px 1px #ccc;
   }
 
-  .login-btn{
+  .login-btn {
     background-color: #f4f5f900;
     color: #616161;
     font-size: 14px;
+  }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 5px 0;
+  }
+  .footer span {
+    font-size: 13px;
+    margin-left: 2px;
+  }
+  .footer a {
+    font-size: 13px;
+    color: #14a0fe;
   }
 }

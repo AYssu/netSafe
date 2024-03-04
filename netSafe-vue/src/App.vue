@@ -15,36 +15,12 @@ import myIcon_active from '@/assets/images/my_act.png'
 import '@/assets/css/App.css'
 import { useUserInfoStore } from '@/stores/user.js'
 const userInfoStore = useUserInfoStore()
+import { useStore } from 'vuex'
+const store = useStore()
 
-const activeBar = ref({
-  home: homeIcon,
-  group: grgroupIcon,
-  announcement: announcementIcon,
-  my: myIcon
-})
 
-const activeIconMap = ref({
-  home: homeIcon_active,
-  group: groupIcon_active,
-  announcement: announcementIcon_active,
-  my: myIcon_active
-})
-import { onMounted } from 'vue'
-onMounted(() => {
-  activeBar.value.home = activeIconMap.value.home
-})
-
-const changeIcon = (iconType) => {
-  activeBar.value.home = homeIcon
-  activeBar.value.group = grgroupIcon
-  activeBar.value.announcement = announcementIcon
-  activeBar.value.my = myIcon
-
-  if (activeIconMap.value.hasOwnProperty(iconType)) {
-    activeBar.value[iconType] = activeIconMap.value[iconType]
-  } else {
-    console.warn(`No icon found for type: ${iconType}`)
-  }
+const changeIcon = (page) => {
+  store.commit('set', page)
 }
 </script>
 
@@ -55,35 +31,25 @@ const changeIcon = (iconType) => {
       <RouterView></RouterView>
     </main>
     <footer v-if="userInfoStore.info.id != null">
-      <router-link
-        class="footer-item"
-        to="/index"
-        active-class="active"
-        @click="changeIcon('home')"
-      >
-        <img :src="activeBar.home" alt="主页" />
+      <router-link class="footer-item" to="/index" active-class="active" @click="changeIcon('1')">
+        <img :src="store.state.page == 1 ? homeIcon_active : homeIcon" alt="主页" />
         <span>首页</span>
       </router-link>
-      <router-link
-        class="footer-item"
-        to="/group"
-        active-class="active"
-        @click="changeIcon('group')"
-      >
-        <img :src="activeBar.group" alt="群组" />
+      <router-link class="footer-item" to="/group" active-class="active" @click="changeIcon('2')">
+        <img :src="store.state.page == 2 ? groupIcon_active : grgroupIcon" alt="群组" />
         <span>群组</span>
       </router-link>
       <router-link
         class="footer-item"
         to="/personal"
         active-class="active"
-        @click="changeIcon('announcement')"
+        @click="changeIcon('3')"
       >
-        <img :src="activeBar.announcement" alt="公告" />
+        <img :src="store.state.page == 3 ? announcementIcon_active : announcementIcon" alt="公告" />
         <span>公告</span>
       </router-link>
-      <router-link class="footer-item" to="/portal" active-class="active" @click="changeIcon('my')">
-        <img :src="activeBar.my" alt="我的" />
+      <router-link class="footer-item" to="/portal" active-class="active" @click="changeIcon('4')">
+        <img :src="store.state.page == 4 ? myIcon_active : myIcon" alt="我的" />
         <span>我的</span>
       </router-link>
     </footer>

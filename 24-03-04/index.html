@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    body {
+        color: #333;
+    }
+
+    /* 风车 */
+    .windmill {
+        margin-top: 100px;
+        margin-left: 100px;
+        position: relative;
+    }
+
+    .leaves-box {
+        position: absolute;
+    }
+
+    .leaves {
+        width: 0;
+        height: 0;
+        border-left: 50px solid transparent;
+        border-right: 50px solid transparent;
+        border-bottom: 40px solid #C73736;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    .leaves1 {
+        transform: rotate(30deg);
+    }
+
+    .leaves2 {
+        border-bottom-color: #59BFED;
+        transform: rotate(120deg);
+        left: 76px;
+        top: 9px;
+    }
+
+    .leaves3 {
+        border-bottom-color: #DA7087;
+        transform: rotate(210deg);
+        left: 67px;
+        top: 84px;
+    }
+
+    .leaves4 {
+        border-bottom-color: #56D699;
+        transform: rotate(300deg);
+        left: -8px;
+        top: 75px;
+    }
+
+    .round {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #FC899B;
+        border: 2px solid #333;
+        position: absolute;
+        left: 72px;
+        top: 52px;
+        z-index: 2;
+    }
+
+    .stick {
+        width: 4px;
+        height: 160px;
+        background: #FC899B;
+        border: 2px solid;
+        position: absolute;
+        left: 80px;
+        top: 60px;
+    }
+
+    .leaves-box {
+        transform-origin: 80px 60px;
+        animation: wave .8s linear infinite;
+    }
+
+    @keyframes wave {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<body>
+    <div class="windmill">
+        <div class="leaves-box">
+            <div class="leaves leaves1"></div>
+            <div class="leaves leaves2"></div>
+            <div class="leaves leaves3"></div>
+            <div class="leaves leaves4"></div>
+        </div>
+        <div class="round"></div>
+        <div class="stick">
+        </div>
+    </div>
+</body>
+
+</html>

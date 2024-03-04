@@ -5,12 +5,14 @@ import back from '@/assets/images/back_icon.png'
 import report from '@/assets/images/call.png'
 import more from '@/assets/images/more.png'
 import line from '@/assets/images/xiansuo.png'
+import { useUserInfoStore } from '@/stores/user.js'
+const userInfoStore = useUserInfoStore()
 </script>
 
 <template>
   <div class="topbar">
     <img :src="homePersion" alt="" />
-    <span>欢迎您，阿夜</span>
+    <span>欢迎您，{{ userInfoStore.info.username }}</span>
   </div>
   <div class="msgBox">
     <div class="msg">
