@@ -3,6 +3,8 @@ a {
   text-decoration: none;
   color: #3a3737;
   font-size: 15px;
+  background-color: #145aa500;
+  outline: none;
 }
 
 footer {
@@ -27,6 +29,7 @@ footer {
   /* 宽度占满整个容器 */
   box-shadow: -2px -2px 5px #e7e7e7;
 }
+
 
 .footer-item {
   display: grid;

@@ -126,14 +126,14 @@ const userInfoStore = useUserInfoStore()
   grid-template-rows: auto auto;
   gap: 15px;
   box-sizing: border-box;
-  width: 100%;
+  width: 100vw;
   max-height: 1000px;
   padding: 10px 20px;
 }
 .centerFunBox > .fun_items {
-  width: 100%;
   height: 110px;
   border-radius: 20px;
+  box-sizing: border-box;
 }
 .fun_items {
   box-sizing: border-box;

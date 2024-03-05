@@ -18,6 +18,8 @@ const router = useRouter()
 import { ElMessage } from 'element-plus'
 import { useUserInfoStore } from '@/stores/user.js'
 const userInfoStore = useUserInfoStore()
+import {useTokenStores} from '@/stores/token.js'
+const TokenStores = useTokenStores();
 function validateLoginData() {
   const { username, password } = loginDate.value
 
@@ -50,10 +52,13 @@ onMounted(() => {
     router.push('/index');
   }
 })
-const login = () => {
+import { userLoginService,userInfoServices } from '@/api/user.js'
+const login = async () => {
   if (validateLoginData()) {
-    userInfoStore.info.id = 1
-    userInfoStore.info.username = loginDate.value.username
+    const result = await userLoginService(loginDate.value);
+    TokenStores.setToken(result.data);
+    const user = await userInfoServices();
+    userInfoStore.info = user.data;
     ElMessage.success('登录成功')
     router.push('/index')
   }

@@ -12,9 +12,9 @@ const router = useRouter()
 const registerDate = ref({
   username: '',
   password: '',
+  organization: '',
   phone: '',
-  group: '',
-  checkNumber: ''
+  code: ''
 })
 
 const sendMessage = ref({
@@ -47,12 +47,14 @@ const options = [
     label: 'Option5'
   }
 ]
-const sendMessageClick = () => {
+
+import { sendCodeService,userRegisterService } from '@/api/user.js'
+const sendMessageClick = async () => {
   // ...
   //前面为发送验证码逻辑
-
+  const result = await sendCodeService(registerDate.value.phone);
   if (!sendMessage.value.send) {
-    ElMessage.success('发送成功')
+    ElMessage.success('本次的验证码为:' + result.data)
     sendMessage.value.send = true
     sendMessage.value.time = 60
     const timer = setInterval(() => {
@@ -68,6 +70,18 @@ const sendMessageClick = () => {
   } else {
     ElMessage.error('等待' + sendMessage.value.time + 's后重试!')
   }
+}
+
+const login =async () => {
+registerDate.value.organization = value.value;
+if(registerDate.value.code == '' || registerDate.value.organization == '' || registerDate.value.phone == '' || registerDate.value.password == '' || registerDate.value.username == '' )
+{
+  ElMessage.error('请填写完整信息!')
+} else {
+  const result = await userRegisterService(registerDate.value);
+  ElMessage.success('注册成功!');
+  router.push('/');
+}
 }
 </script>
 
@@ -118,7 +132,7 @@ const sendMessageClick = () => {
         </div>
         <div class="input-bottom-box">
           <input autocomplete="off" type="text" name="password" id="password" placeholder="请输入验证码"
-            v-model="registerDate.password" />
+            v-model="registerDate.code" />
           <span @click="sendMessageClick()" :style="!sendMessage.send ? 'color: #0685ff;' : 'color:grey'">{{
             sendMessage.send ? sendMessage.text : '发送验证码' }}</span>
         </div>
