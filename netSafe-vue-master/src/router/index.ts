@@ -3,7 +3,7 @@ import LoginLayoutView from '@/views/LoginLayout.vue'
 import IndexLayoutView from '@/views/IndexLayout.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/login',
@@ -23,12 +23,22 @@ const router = createRouter({
         {
           path: 'command',
           name: 'command',
-          component: () => import('@/views/command/Index.vue')
+          component: () => import('@/views/command/IndexLayout.vue')
         },
         {
           path: 'depart',
           name: 'depart',
-          component: () => import('@/views/depart/Index.vue')
+          component: () => import('@/views/depart/IndexLayout.vue')
+        },
+        {
+          path: 'notice',
+          name: 'notice',
+          component: () => import('@/views/notice/IndexLayout.vue')
+        },
+        {
+          path: 'screen',
+          name: 'screen',
+          component: () => import('@/views/screen/IndexLayout.vue')
         }
       ]
     }

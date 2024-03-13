@@ -1,17 +1,16 @@
 {
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/main.js"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/main.js","src/components/*.vue","src/views/command/*.vue"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "jsx": "preserve",
     "noImplicitAny": false,
     "allowJs": true,
-    "target": "es2016",
-    "module": "commonjs",
+    "target": "es2022",
+    "module": "NodeNext",
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["webpack-env"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

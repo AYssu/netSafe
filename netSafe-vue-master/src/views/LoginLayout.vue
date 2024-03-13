@@ -104,7 +104,7 @@ const login = () => {
             <div class="center-card-left"></div>
             <div class="center-card-right">
                 <div class="center-card-right-top">
-                    <img src="@/assets/logoname.png" alt="" srcset="">
+                    <img src="@/assets/images/logoname.png" alt="" srcset="">
                 </div>
                 <el-form ref="ruleFormRef" style="max-width: 600px" :model="ruleForm" status-icon :rules="rules"
                     label-width="auto" class="demo-ruleForm">
