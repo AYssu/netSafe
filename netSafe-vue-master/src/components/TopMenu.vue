@@ -1,14 +1,15 @@
 <template>
     <el-container class="TopMenu">
         <el-header>
-            <el-menu :ellipsis="false" background-color="#f9f9f986" default-active="/index/command" class="el-menu-demo"
-                mode="horizontal">
-                <el-menu-item v-for="(item, index) in menus" :key="index" index="/index/notice">
+            <el-menu :ellipsis="false" background-color="#f9f9f986" :default-active="activeIndex" class="el-menu-demo"
+                mode="horizontal" router> 
+                <el-menu-item v-for="(item) in menus" :key="item.id" :index="item.path">
                     <div class="items">
                         <img class="icon" :src="item.icon" alt="tup">
                         <span>{{ item.title }}</span>
                     </div>
                 </el-menu-item>
+                
             </el-menu>
             <div class="topLogo">
                 <img class="logo" src="@/assets/images/home_person.png" alt="">
@@ -19,7 +20,7 @@
 
                 <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
 
-                <el-dropdown>
+                <el-dropdown trigger="click">
                     <span class="el-dropdown-link">欢迎你 stu001<el-icon class="el-icon--right"><arrow-down /></el-icon>
                     </span>
                     <template #dropdown>
@@ -36,33 +37,39 @@
 </template>
 <script lang="ts" setup>
 
-import {
-    ArrowDown,
-    CirclePlusFilled,
-    Plus,
-} from '@element-plus/icons-vue'
+import {ArrowDown,CirclePlusFilled,Plus} from '@element-plus/icons-vue/dist/index.js';
 
-import { reactive, ref } from 'vue';
-
-const getImage = (name) => {
+import { onMounted, reactive, ref } from 'vue';
+import { useRoute } from 'vue-router';  
+const getImage = (name:any) => {
     return '../src/assets/images/' + name + '.png'
 }
-
+const activeIndex = ref<string>('depart')
+const router = useRoute();
+onMounted(() => {
+    console.log(router.name);
+    
+    activeIndex.value = router.name as string;
+})
 const menus = reactive(
     [
         {
+            id:1,
             title: "指挥调度",
-            path: "/index/command",
+            path: "command",
             icon: getImage('command'),
         }, {
+            id:2,
             title: "组织架构",
             path: "depart",
             icon: getImage('depart'),
         }, {
+            id:3,
             title: "广播系统",
             path: "notice",
             icon: getImage('notice'),
         }, {
+            id:4,
             title: "大屏数据",
             path: "screen",
             icon: getImage('screen'),
@@ -176,6 +183,10 @@ const menus = reactive(
         .items {
             opacity: 1;
         }
+    }
+
+    .el-dropdown {
+        --el-dropdown-menuItem-hover-fill: none;
     }
 }
 </style>

@@ -73,7 +73,6 @@ const getCodeImage = async () => {
     }
 }
 
-
 onMounted(() => {
     getCodeImage()
     watch(ruleForm, async (newData, oldData) => {
