@@ -91,6 +91,9 @@ const rules = reactive<FormRules<typeof ruleForm>>({
     code: [{ validator: checkCode, trigger: 'blur' }],
 })
 
+const login = () => {
+    router.push("/index")
+}
 
 </script>
 
@@ -138,7 +141,7 @@ const rules = reactive<FormRules<typeof ruleForm>>({
                         <span class="remember">记住密码</span>
                     </el-form-item>
                     <el-form-item>
-                        <el-button class="loginBtn" type="primary" round :disabled="disable">登录</el-button>
+                        <el-button class="loginBtn" type="primary" round :disabled="disable" @click="login">登录</el-button>
                     </el-form-item>
                 </el-form>
             </div>
