@@ -2,14 +2,14 @@
     <el-container class="TopMenu">
         <el-header>
             <el-menu :ellipsis="false" background-color="#f9f9f986" :default-active="activeIndex" class="el-menu-demo"
-                mode="horizontal" router> 
+                mode="horizontal" router>
                 <el-menu-item v-for="(item) in menus" :key="item.id" :index="item.path">
                     <div class="items">
                         <img class="icon" :src="item.icon" alt="tup">
                         <span>{{ item.title }}</span>
                     </div>
                 </el-menu-item>
-                
+
             </el-menu>
             <div class="topLogo">
                 <img class="logo" src="@/assets/images/home_person.png" alt="">
@@ -18,10 +18,12 @@
             <div class="rightItems">
                 <el-button color="#002daa" round>大屏</el-button>
 
-                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+                <el-avatar :src="icon" />
 
                 <el-dropdown trigger="click">
-                    <span class="el-dropdown-link">欢迎你 stu001<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                    <span class="el-dropdown-link" style="cursor: pointer;">欢迎你 {{ user.info.adminname }}
+                        <el-icon class="el-icon--right"><arrow-down />
+                        </el-icon>
                     </span>
                     <template #dropdown>
                         <el-dropdown-menu>
@@ -37,39 +39,50 @@
 </template>
 <script lang="ts" setup>
 
-import {ArrowDown,CirclePlusFilled,Plus} from '@element-plus/icons-vue/dist/index.js';
+import { ArrowDown, CirclePlusFilled, Plus } from '@element-plus/icons-vue/dist/index.js';
 
 import { onMounted, reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';  
-const getImage = (name:any) => {
+import { useRoute } from 'vue-router';
+const getImage = (name: any) => {
     return '../src/assets/images/' + name + '.png'
 }
 const activeIndex = ref<string>('depart')
 const router = useRoute();
+import { userInfoGetService } from '../api/user';
+import { useUserInfoStore } from '../stores/user';
+const user = useUserInfoStore();
+const icon = ref<string>();
+
+const getAdminInfo = async () => {
+    const reslut = await userInfoGetService();
+    user.setInfo(reslut.data);
+    icon.value = user.info.userPic;
+}
+
+
 onMounted(() => {
-    console.log(router.name);
-    
+    getAdminInfo();
     activeIndex.value = router.name as string;
 })
 const menus = reactive(
     [
         {
-            id:1,
+            id: 1,
             title: "指挥调度",
             path: "command",
             icon: getImage('command'),
         }, {
-            id:2,
+            id: 2,
             title: "组织架构",
             path: "depart",
             icon: getImage('depart'),
         }, {
-            id:3,
+            id: 3,
             title: "广播系统",
             path: "notice",
             icon: getImage('notice'),
         }, {
-            id:4,
+            id: 4,
             title: "大屏数据",
             path: "screen",
             icon: getImage('screen'),
@@ -83,7 +96,7 @@ const menus = reactive(
 .TopMenu {
     .topLogo {
         width: 280px;
-        height: 60px;
+        height: 59px;
         display: flex;
         align-items: center;
         background-repeat: no-repeat;
@@ -134,12 +147,14 @@ const menus = reactive(
         display: flex;
         align-items: center;
         position: absolute;
-        height: 60px;
+        height: 59px;
         top: 0;
         right: 0;
         box-sizing: border-box;
         padding-right: 50px;
+        background: linear-gradient(to right, #002daa00 0%, #002daa83 20%, #002daa 100%);
 
+        padding-left: 10px;
 
         .el-dropdown-link {
             font-size: 14px;
