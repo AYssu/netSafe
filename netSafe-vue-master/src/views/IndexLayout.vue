@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import TopMenu from '@/components/TopMenu.vue'
 </script>
 

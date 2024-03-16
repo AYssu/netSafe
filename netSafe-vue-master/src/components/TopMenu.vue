@@ -21,7 +21,7 @@
                 <el-avatar :src="icon" />
 
                 <el-dropdown trigger="click">
-                    <span class="el-dropdown-link" style="cursor: pointer;">欢迎你 {{ user.info.adminname }}
+                    <span class="el-dropdown-link" style="cursor: pointer;">欢迎你 {{ user.info?user.info.adminname:'加载中...' }}
                         <el-icon class="el-icon--right"><arrow-down />
                         </el-icon>
                     </span>
@@ -74,7 +74,7 @@ import { ArrowDown, CirclePlusFilled, Plus } from '@element-plus/icons-vue/dist/
 
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import admimRouter from '@/router';
+import admimRouter from '@/router/index.ts';
 
 //控制抽屉是否显示
 const visibleDrawer = ref<boolean>(false)
@@ -89,11 +89,9 @@ const adminInfo = ref<any>({
 
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-const getImage = (name: any) => {
-    return '../src/assets/images/' + name + '.png'
-}
 
-import {adminUpdateService} from '@/api/user'
+
+import {adminUpdateService} from '@/api/user.ts'
 
 const updateAdmin = async ()=>{
     const result = await adminUpdateService(adminInfo.value);
@@ -103,8 +101,8 @@ const updateAdmin = async ()=>{
 }
 const activeIndex = ref<string>('depart')
 const router = useRoute();
-import { userInfoGetService } from '../api/user';
-import { useUserInfoStore } from '../stores/user';
+import { userInfoGetService } from '@/api/user.ts';
+import { useUserInfoStore } from '@/stores/user.ts';
 const user = useUserInfoStore();
 const icon = ref<string>();
 
@@ -131,6 +129,14 @@ const uploadSuccess = (img: any) => {
     //img就是后台响应的数据，格式为：{code:状态码，message：提示信息，data: 图片的存储地址}
     adminInfo.value.userPic = img.data
 }
+// @ts-ignore  
+import commandIcon from '@/assets/images/command.png' 
+// @ts-ignore  
+import departIcon from '@/assets/images/depart.png'  
+// @ts-ignore  
+import noticeIcon from '@/assets/images/notice.png'  
+// @ts-ignore  
+import screenIcon from '@/assets/images/screen.png'
 
 const menus = reactive(
     [
@@ -138,22 +144,22 @@ const menus = reactive(
             id: 1,
             title: "指挥调度",
             path: "command",
-            icon: getImage('command'),
+            icon: commandIcon,
         }, {
             id: 2,
             title: "组织架构",
             path: "depart",
-            icon: getImage('depart'),
+            icon: departIcon,
         }, {
             id: 3,
             title: "广播系统",
             path: "notice",
-            icon: getImage('notice'),
+            icon: noticeIcon,
         }, {
             id: 4,
             title: "大屏数据",
             path: "screen",
-            icon: getImage('screen'),
+            icon: screenIcon,
         },
     ]
 )
@@ -161,7 +167,6 @@ const menus = reactive(
 import { ElMessage } from 'element-plus'
 //添加请求拦截器
 import { useTokenStores } from '@/stores/token.js'
-import { fa } from 'element-plus/es/locales.mjs';
 const tokenStore = useTokenStores()
 const exitLogin = () => {
     user.removeInfo();

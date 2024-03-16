@@ -192,7 +192,7 @@ const limitData = ref<any>({
     state: null
 })
 
-import { groupGetService, groupUpdateService, groupCreateService, guardCreateService, guardGetService, guardReviewService, guardUpdateService, guardrePassService } from "@/api/user";
+import { groupGetService, groupUpdateService, groupCreateService, guardCreateService, guardGetService, guardReviewService, guardUpdateService, guardrePassService } from "@/api/user.ts";
 
 const groupData = ref<any[]>([]);
 
@@ -281,7 +281,7 @@ const reviewFun = (row: any) => {
 
 }
 
-const disableFun = (row: User) => {
+const disableFun = (row: any) => {
     if (row.state !== 1) {
         ElMessageBox.alert('确定要禁用' + row.guardName + "吗？", '禁用用户', {
             // if you want to disable its autofocus
@@ -290,7 +290,7 @@ const disableFun = (row: User) => {
             callback: async (action: Action) => {
                 if (action === 'confirm') {
                     const parmas = new URLSearchParams();
-                    parmas.append("id", row.id);
+                    parmas.append("id", row.id.toString());
                     parmas.append("type", "1");
                     const result = await guardReviewService(parmas)
                     ElMessage.success(result.data ? '操作失败' : "操作成功")

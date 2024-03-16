@@ -1,11 +1,12 @@
 {
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/main.js","src/components/*.vue","src/views/command/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/main.js","src/components/*.vue","src/views/command/*.vue","src/custom-types.d.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "jsx": "preserve",
     "noImplicitAny": false,
     "allowJs": true,
     "target": "es2022",
+    "noEmit": true,
     "module": "NodeNext",
     "baseUrl": "./",
     "paths": {
@@ -15,6 +16,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
+    "allowImportingTsExtensions":true
   }
  }
  

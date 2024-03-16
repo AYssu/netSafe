@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import '@/assets/view/LoginLayout.less'
-import router from '@/router';
+import router from '@/router/index.ts';
 
 const yzm = ref<string>()
 import { onMounted, reactive, ref, watch } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
-import { ElMessage } from 'element-plus'
 const ruleFormRef = ref<FormInstance>()
 const rememberMe = ref<boolean>(true)
 
@@ -52,11 +51,10 @@ const ruleForm = reactive({
 
 const disable = ref<boolean>(true)
 
-import { codeService, userLoginService } from '@/api/user'
+import { codeService, userLoginService } from '@/api/user.ts'
 const getCodeImage = async () => {
     try {
         // 使用axios发送GET请求，并指定响应类型为blob  
-
         const response = await codeService();
         // 创建一个Blob URL来显示图片  
         const url = URL.createObjectURL(new Blob([response.data]));
@@ -68,15 +66,18 @@ const getCodeImage = async () => {
         console.error(err);
     }
 }
-import { useUserInfoStore } from '@/stores/user'
+import { useUserInfoStore } from '@/stores/user.ts'
 
 const user = useUserInfoStore()
-import crypto from '@/utils/crypto';
+import crypto from '@/utils/crypto.ts';
 
 onMounted(() => {
-    ruleForm.user = crypto.get(user.remenber.admin);
-    ruleForm.pass = crypto.get(user.remenber.password);
     getCodeImage()
+    if(user.remenber){
+        ruleForm.user = crypto.get(user.remenber.admin);
+        ruleForm.pass = crypto.get(user.remenber.password);
+    }
+    
     watch(ruleForm, async (newData, oldData) => {
         if (newData.user !== '' && newData.pass !== '' && newData.code !== '') {
             disable.value = false;
@@ -93,7 +94,7 @@ const rules = reactive<FormRules<typeof ruleForm>>({
 })
 
 
-import { useTokenStores } from '@/stores/token'
+import { useTokenStores } from '@/stores/token.ts'
 
 
 const TokenStores = useTokenStores();
@@ -103,25 +104,23 @@ const loginAdmin = async () => {
     parmas.append("adminname", ruleForm.user)
     parmas.append("password", ruleForm.pass)
     parmas.append("code", ruleForm.code)
-    const response = await userLoginService(parmas);
+    const response : any = await userLoginService(parmas);
 
-    let reslut = response.data;
 
     const cydata = {
         admin: crypto.set(ruleForm.user),
         password: crypto.set(ruleForm.pass)
     }
 
-    if (reslut.code == 0) {
+    if (response.code == 0) {
         getCodeImage()
-
     } else {
         if (rememberMe.value == true) {
             user.setRemenber(cydata)
         } else {
             user.removeRemenber()
         }
-        TokenStores.setToken(reslut)
+        TokenStores.setToken(response.data)
         router.push({ name: 'command' })
     }
 
