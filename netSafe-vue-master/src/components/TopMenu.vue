@@ -27,24 +27,79 @@
                     </span>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item :icon="Plus">修改密码</el-dropdown-item>
-                            <el-dropdown-item :icon="CirclePlusFilled">退出登录</el-dropdown-item>
-
+                            <el-dropdown-item :icon="Plus" @click="visibleDrawer = true">修改资料</el-dropdown-item>
+                            <el-dropdown-item @click="exitLogin" :icon="CirclePlusFilled">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
             </div>
         </el-header>
     </el-container>
+
+    <el-drawer v-model="visibleDrawer" title="修改个人资料" direction="rtl" size="60%">
+        <el-form :model="adminInfo" label-width="100px">
+           
+            <el-form-item label="管理员昵称">
+                <el-input v-model="adminInfo.adminname" placeholder="用户名"></el-input>
+            </el-form-item>
+            <el-form-item label="邮箱地址">
+                <el-input v-model="adminInfo.email" placeholder="管理员邮箱"></el-input>
+            </el-form-item>
+            <el-form-item label="头像">
+                <el-upload class="avatar-uploader" :show-file-list="false" :auto-upload="true" action="/api/file/upload"
+                    name="file" :headers="{ 'Authorization': tokenStore.token }" :on-success="uploadSuccess">
+                    <img v-if="adminInfo.userPic" :src="adminInfo.userPic" class="avatar" />
+                    <el-icon v-else class="avatar-uploader-icon">
+                        <Plus />
+                    </el-icon>
+                </el-upload>
+            </el-form-item>
+            <el-form-item label="个性签名">
+                <div class="editor">
+                    <quill-editor theme="snow" v-model:content="adminInfo.content" contentType="html">
+                    </quill-editor>
+                </div>
+            </el-form-item>
+            <el-form-item>
+
+                <el-button type="success" @click="updateAdmin">修改个人资料</el-button>
+            </el-form-item>
+        </el-form>
+    </el-drawer>
 </template>
+
 <script lang="ts" setup>
 
 import { ArrowDown, CirclePlusFilled, Plus } from '@element-plus/icons-vue/dist/index.js';
 
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import admimRouter from '@/router';
+
+//控制抽屉是否显示
+const visibleDrawer = ref<boolean>(false)
+//添加表单数据模型
+const adminInfo = ref<any>({
+    adminname: '',
+    email: '',
+    userPic: '',
+    content: '',
+    password: ''
+})
+
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 const getImage = (name: any) => {
     return '../src/assets/images/' + name + '.png'
+}
+
+import {adminUpdateService} from '@/api/user'
+
+const updateAdmin = async ()=>{
+    const result = await adminUpdateService(adminInfo.value);
+    ElMessage.success(result.data?result.data:"修改成功");
+    visibleDrawer.value = false;
+    getAdminInfo()
 }
 const activeIndex = ref<string>('depart')
 const router = useRoute();
@@ -57,6 +112,12 @@ const getAdminInfo = async () => {
     const reslut = await userInfoGetService();
     user.setInfo(reslut.data);
     icon.value = user.info.userPic;
+    adminInfo.value.userPic = icon.value
+    adminInfo.value.adminname = user.info.adminname
+    adminInfo.value.email = user.info.email
+    adminInfo.value.content = user.info.content
+    console.log(user.info);
+    
 }
 
 
@@ -64,6 +125,13 @@ onMounted(() => {
     getAdminInfo();
     activeIndex.value = router.name as string;
 })
+
+const uploadSuccess = (img: any) => {
+    console.log(img);
+    //img就是后台响应的数据，格式为：{code:状态码，message：提示信息，data: 图片的存储地址}
+    adminInfo.value.userPic = img.data
+}
+
 const menus = reactive(
     [
         {
@@ -89,10 +157,59 @@ const menus = reactive(
         },
     ]
 )
+
+import { ElMessage } from 'element-plus'
+//添加请求拦截器
+import { useTokenStores } from '@/stores/token.js'
+import { fa } from 'element-plus/es/locales.mjs';
+const tokenStore = useTokenStores()
+const exitLogin = () => {
+    user.removeInfo();
+    tokenStore.removeToken();
+    ElMessage.success("退出成功")
+    admimRouter.push("/login")
+}
 </script>
 
 
-<style scoped lang="less">
+<style scoped lang="less" >
+.avatar-uploader {
+    .avatar {
+            width: 178px;
+            height: 178px;
+            display: block;
+        }
+
+        .el-upload {
+            border: 1px dashed var(--el-border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: var(--el-transition-duration-fast);
+        }
+
+        .el-upload:hover {
+            border-color: var(--el-color-primary);
+        }
+
+        .el-icon.avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 178px;
+            height: 178px;
+            text-align: center;
+        }
+}
+
+.editor {
+    width: 100%;
+
+    :deep(.ql-editor) {
+        min-height: 200px;
+    }
+}
+
 .TopMenu {
     .topLogo {
         width: 280px;

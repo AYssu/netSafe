@@ -43,16 +43,19 @@
                     <el-input v-model="limitData.phone" style="width: 120px" size="small" placeholder="请输入手机号"
                         clearable />
                     <span>公司</span>
-                    <el-select v-model="limitData.company" placeholder="请选择" size="small" style="width: 130px">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                    <el-select v-model="limitData.company" placeholder="请选择" size="small" style="width: 130px"
+                        clearable>
+                        <el-option v-for="c in groupData" :key="c.id" :label="c.groupName" :value="c.id">
+                        </el-option>
                     </el-select>
                     <span>状态</span>
-                    <el-select v-model="limitData.state" placeholder="请选择" size="small" style="width: 90px">
+                    <el-select v-model="limitData.state" placeholder="请选择" size="small" style="width: 90px" clearable>
                         <el-option v-for="item in states" :key="item.label" :label="item.label" :value="item.value" />
                     </el-select>
                     <div class="right-box">
-                        <el-button class="add" type="primary" size="small">查询</el-button>
-                        <el-button size="small" @click="visibleDrawer=true">新增</el-button>
+                        <el-button class="add" type="primary" size="small" @click="getGuard">查询</el-button>
+                        <el-button size="small"
+                            @click="guardForm = {}, visibleDrawer = true, guardForm.type = 1">新增</el-button>
                     </div>
                 </div>
 
@@ -78,14 +81,13 @@
                         </template>
                     </el-table-column>
                     <el-table-column property="createTime" label="注册时间" width="180" />
-                    <el-table-column fixed="right" label="操作" width="250">
+                    <el-table-column fixed="right" label="操作" width="160">
                         <template #default="{ row }">
                             <div class="fun-list">
                                 <span @click="reviewFun(row)">审核</span>
                                 <span @click="disableFun(row)">禁用</span>
                                 <span @click="handleEdit(row)">编辑</span>
-                                <span @click="masterFun(row)">设为队长</span>
-                                <span @click="handleEdit(row)">重置密码</span>
+                                <span @click="rePassword(row)">重置密码</span>
                             </div>
                         </template>
                     </el-table-column>
@@ -100,7 +102,7 @@
     </el-main>
 
 
-    <el-drawer v-model="visibleDrawer" title="添加保安" direction="rtl" size="50%">
+    <el-drawer v-model="visibleDrawer" :title="guardForm.type == 2 ? '修改保安信息' : '添加保安'" direction="rtl" size="50%">
         <!-- 添加文章表单 -->
         <el-form :model="guardForm" label-width="100px">
             <el-form-item label="保安姓名">
@@ -121,7 +123,7 @@
                     <el-option label="否" value="否"></el-option>
                 </el-select>
             </el-form-item>
-        
+
             <el-form-item label="状态">
                 <el-select placeholder="请选择" v-model="guardForm.state">
                     <el-option v-for="item in states" :key="item.label" :label="item.label" :value="item.value" />
@@ -129,7 +131,9 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="addGuard">新增保安</el-button>
+                <el-button v-if="guardForm.type == 1" type="primary" @click="addGuard">新增保安</el-button>
+                <el-button v-if="guardForm.type == 2" type="primary" @click="updateGuard">修改信息</el-button>
+                <el-button v-if="guardForm.type == 2" type="danger" @click="delectGuard">删除保安</el-button>
             </el-form-item>
         </el-form>
     </el-drawer>
@@ -141,29 +145,30 @@ import { ref, onMounted } from 'vue';
 import { ElTable } from 'element-plus'
 
 interface User {
-    id: number,
-    guardName: string,
-    phone: string,
-    company: string,
-    master: string,
-    state: number|string,
-    cid: string|number,
-    createTime: string
+    type?: number,
+    id?: number,
+    guardName?: string,
+    phone?: string,
+    company?: string,
+    master?: string,
+    state?: number | string | null,
+    cid?: string | number | null,
+    createTime?: string
 }
 //控制抽屉是否显示
 const visibleDrawer = ref(false)
 //添加表单数据模型
-const guardForm = ref({
+const guardForm = ref<User>({
     "id": 0,
     "guardName": "",
     "phone": "",
     "cid": null,
     "master": "否",
-    "state": 0
+    "state": null
 })
 
 const currentPage4 = ref(1)
-const pageSize4 = ref(10)
+const pageSize4 = ref(15)
 const pageTotle = ref(100)
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
@@ -180,14 +185,14 @@ const states = [
 ]
 
 
-const limitData = ref({
+const limitData = ref<any>({
     name: '',
     phone: '',
     company: '',
-    state: 0
+    state: null
 })
 
-import { groupGetService, groupUpdateService, groupCreateService, guardCreateService ,guardGetService} from "@/api/user";
+import { groupGetService, groupUpdateService, groupCreateService, guardCreateService, guardGetService, guardReviewService, guardUpdateService, guardrePassService } from "@/api/user";
 
 const groupData = ref<any[]>([]);
 
@@ -198,17 +203,21 @@ const groupGet = async () => {
 }
 
 const getGuard = async () => {
-   
+
     const parmas = new URLSearchParams();
     parmas.append("curren", currentPage4.value.toString())
+    parmas.append("guardName", limitData.value.name)
+    parmas.append("phone", limitData.value.phone)
+    parmas.append("company", limitData.value.company)
+    parmas.append("state", limitData.value.state)
     const result = await guardGetService(parmas);
+
     tableData.value = result.data.items;
     pageTotle.value = result.data.total;
 
     for (let index = 0; index < groupData.value.length; index++) {
         const element = groupData.value[index];
         const gid = element.id;
-
         for (let index2 = 0; index2 < tableData.value.length; index2++) {
             const element = tableData.value[index2];
             const cid = element.cid;
@@ -217,9 +226,6 @@ const getGuard = async () => {
             }
         }
     }
-
-    console.log(result);
-    
 }
 onMounted(() => {
     groupGet()
@@ -227,33 +233,12 @@ onMounted(() => {
 })
 
 
-const options = ref([
-    {
-        value: 'Option1',
-        label: 'Option1',
-    },
-    {
-        value: 'Option2',
-        label: 'Option2',
-    },
-    {
-        value: 'Option3',
-        label: 'Option3',
-    },
-    {
-        value: 'Option4',
-        label: 'Option4',
-    },
-    {
-        value: 'Option5',
-        label: 'Option5',
-    },
-])
-
-
 let tableData = ref<User[]>([])
-const handleEdit = (row: unknown) => {
-    console.log(row);
+const handleEdit = (row: User) => {
+    //深拷贝 不影响原本的那行数据
+    guardForm.value = JSON.parse(JSON.stringify(row));
+    guardForm.value.type = 2;
+    visibleDrawer.value = true;
 }
 
 
@@ -270,18 +255,20 @@ const handleCurrentChange = (val: number) => {
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { Action } from 'element-plus'
 
-
-
-
 const reviewFun = (row: any) => {
     if (row.state === 2) {
-        ElMessageBox.alert('确定要通过' + row.name + "的申请吗？", '通过申请', {
+        ElMessageBox.alert('确定要通过' + row.guardName + "的申请吗？", '通过申请', {
             // if you want to disable its autofocus
             // autofocus: false,
             confirmButtonText: '确定',
-            callback: (action: Action) => {
+            callback: async (action: Action) => {
                 if (action === 'confirm') {
-                    ElMessage.success('操作成功')
+                    const parmas = new URLSearchParams();
+                    parmas.append("id", row.id);
+                    parmas.append("type", "0");
+                    const result = await guardReviewService(parmas)
+                    ElMessage.success(result.data ? '操作失败' : "操作成功")
+                    getGuard()
                 } else {
                     ElMessage.info('已取消操作')
                 }
@@ -294,27 +281,38 @@ const reviewFun = (row: any) => {
 
 }
 
-const disableFun = (row: any) => {
+const disableFun = (row: User) => {
     if (row.state !== 1) {
-        ElMessageBox.alert('确定要禁用' + row.name + "吗？", '禁用用户', {
+        ElMessageBox.alert('确定要禁用' + row.guardName + "吗？", '禁用用户', {
             // if you want to disable its autofocus
             // autofocus: false,
             confirmButtonText: '确定',
-            callback: (action: Action) => {
+            callback: async (action: Action) => {
                 if (action === 'confirm') {
-                    ElMessage.success('操作成功')
+                    const parmas = new URLSearchParams();
+                    parmas.append("id", row.id);
+                    parmas.append("type", "1");
+                    const result = await guardReviewService(parmas)
+                    ElMessage.success(result.data ? '操作失败' : "操作成功")
+                    getGuard()
                 } else {
                     ElMessage.info('已取消操作')
                 }
             },
         })
     } else {
-        ElMessageBox.alert('确定要解禁' + row.name + "吗？", '解 禁用户', {
+        ElMessageBox.alert('确定要解禁' + row.guardName + "吗？", '解禁用户', {
 
             confirmButtonText: '确定',
-            callback: (action: Action) => {
+            callback: async (action: Action) => {
                 if (action === 'confirm') {
                     ElMessage.success('操作成功')
+                    const parmas = new URLSearchParams();
+                    parmas.append("id", row.id);
+                    parmas.append("type", "1");
+                    const result = await guardReviewService(parmas)
+                    ElMessage.success(result.data ? '操作失败' : "操作成功")
+                    getGuard()
                 } else {
                     ElMessage.info('已取消操作')
                 }
@@ -323,26 +321,30 @@ const disableFun = (row: any) => {
     }
 }
 
-const masterFun = (row: any) => {
-    if (row.master !== '是') {
-        ElMessageBox.alert('确定要将用户' + row.name + "设置为队长吗？", '禁用用户', {
+const rePassword = (row: any) => {
 
-            confirmButtonText: '确定',
-            callback: (action: Action) => {
-                if (action == 'confirm') {
-                    ElMessage.success('操作成功')
-                } else if (action == 'cancel') {
-                    ElMessage.info('取消操作')
-                }
+    ElMessageBox.alert('确定要重置' + row.guardName + "的用户密码吗？", '重置密码', {
+        // if you want to disable its autofocus
+        // autofocus: false,
+        confirmButtonText: '确定',
+        callback: async (action: Action) => {
+            if (action === 'confirm') {
+                const parmas = new URLSearchParams();
+                parmas.append("id", row.id);
+                const result = await guardrePassService(parmas)
+                ElMessageBox.alert(row.guardName + "的用户密码为：\n"+result.data, '新密码', {
+                    confirmButtonText: '确定',
+                    callback: async (action: Action) => {
+                        ElMessage.info('请妥善保管')
+                    },
+                })
+            } else {
+                ElMessage.info('已取消操作')
+            }
 
-            },
-        })
-    } else if (row.state === 1) {
-        ElMessage.error("请先解禁用户")
-    } else {
-        ElMessage.error("该用户已是队长")
+        },
+    })
 
-    }
 }
 
 const editGroup = (row: any) => {
@@ -355,7 +357,6 @@ const editGroup = (row: any) => {
             const parmas = new URLSearchParams();
             parmas.append('id', row.id);
             parmas.append('groupName', value);
-
             const result: any = await groupUpdateService(parmas)
             ElMessage.success(result.data ? result.data : '修改成功')
             groupGet()
@@ -396,11 +397,23 @@ const addDepart = () => {
         })
 }
 
-const addGuard =  async () => {
+const addGuard = async () => {
     const result = await guardCreateService(guardForm.value)
     ElMessage.success(result.data ? result.data : '创建成功')
     getGuard()
     visibleDrawer.value = false
+}
+
+const updateGuard = async () => {
+    const result = await guardUpdateService(guardForm.value);
+    ElMessage.success(result.data ? result.data : '更新数据成功')
+    getGuard()
+    guardForm.value = {};
+    visibleDrawer.value = false
+}
+
+const delectGuard = async () => {
+
 }
 </script>
 

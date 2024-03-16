@@ -29,13 +29,34 @@ export const groupCreateService = (params: any) => {
 
 //创建用户
 export const guardCreateService = (params: any) => {
-    
   return request.post('/admin/addGuard', params)
 }
 
 //获取用户
 export const guardGetService = (params: any) => {
-    
-    return request.post('/admin/getGuard', params)
+  return request.post('/admin/getGuard', params)
+}
+
+//通过审核
+
+export const guardReviewService = (params: any) => {
+  return request.post('/admin/reviewGuard', params)
+}
+
+//更新保安信息
+
+
+export const guardUpdateService = (params: any) => {
+  return request.post('/admin/updateGuard', params)
+}
+
+//更新密码
+export const guardrePassService = (params: any) => {
+  return request.post('/admin/passwordGuard', params)
+}
+
+//更新管理员资料
+export const adminUpdateService = (params: any) => {
+  return request.post('/admin/updateAdmin', params)
 }
 

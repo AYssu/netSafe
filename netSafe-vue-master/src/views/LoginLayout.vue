@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import '@/assets/view/LoginLayout.less'
-import axios from 'axios'
 import router from '@/router';
 
 const yzm = ref<string>()
@@ -63,6 +62,7 @@ const getCodeImage = async () => {
         const url = URL.createObjectURL(new Blob([response.data]));
         // 将图片URL赋值给响应式引用  
         yzm.value = url;
+        
     } catch (err) {
         // 捕获错误并打印到控制台  
         console.error(err);
@@ -97,7 +97,6 @@ import { useTokenStores } from '@/stores/token'
 
 
 const TokenStores = useTokenStores();
-
 
 const loginAdmin = async () => {
     const parmas = new URLSearchParams();
@@ -163,7 +162,10 @@ const loginAdmin = async () => {
                         <el-input v-model="ruleForm.code" placeholder="你的验证码" />
                         <template #label>
                             <el-icon color="#1e5feb" :size="20">
-                                <img :src="yzm" alt="" @click="getCodeImage">
+                                <img :src="yzm" v-if="yzm" alt="" @click="getCodeImage">
+                                <el-icon v-else @click="getCodeImage">
+                                    <Refresh />
+                                </el-icon>
                             </el-icon>
                         </template>
                     </el-form-item>
