@@ -73,7 +73,7 @@ import crypto from '@/utils/crypto.ts';
 
 onMounted(() => {
     getCodeImage()
-    if(user.remenber){
+    if(user.remenber.admin&&user.remenber.password){
         ruleForm.user = crypto.get(user.remenber.admin);
         ruleForm.pass = crypto.get(user.remenber.password);
     }
@@ -104,6 +104,7 @@ const loginAdmin = async () => {
     parmas.append("adminname", ruleForm.user)
     parmas.append("password", ruleForm.pass)
     parmas.append("code", ruleForm.code)
+
     const response : any = await userLoginService(parmas);
 
 
@@ -111,7 +112,7 @@ const loginAdmin = async () => {
         admin: crypto.set(ruleForm.user),
         password: crypto.set(ruleForm.pass)
     }
-
+    
     if (response.code == 0) {
         getCodeImage()
     } else {
@@ -125,17 +126,18 @@ const loginAdmin = async () => {
     }
 
 }
-
+// @ts-ignore  
+import loginnameIcon from '@/assets/images/logoname.png'
 </script>
 
 <template>
-    <div class="login-layout">
+    <div class="login-layout" >
         <div class="center-card">
 
             <div class="center-card-left"></div>
             <div class="center-card-right">
                 <div class="center-card-right-top">
-                    <img src="@/assets/images/logoname.png" alt="" srcset="">
+                    <img :src="loginnameIcon" alt="" srcset="">
                 </div>
                 <el-form ref="ruleFormRef"  style="max-width: 600px" :model="ruleForm" status-icon :rules="rules"
                     label-width="auto" class="demo-ruleForm">

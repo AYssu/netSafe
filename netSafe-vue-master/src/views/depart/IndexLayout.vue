@@ -58,22 +58,25 @@
                             @click="guardForm = {}, visibleDrawer = true, guardForm.type = 1">新增</el-button>
                     </div>
                 </div>
-
-                <el-table size="small" ref="multipleTableRef" :data="tableData" style="width: 100%;"
+                <el-row style="margin: 10px 0;">
+                    <el-button type="success" size="small" @click="batchCheck" :disabled="allowData.review">批量审核</el-button>
+                    <el-button type="danger" size="small" @click="batchDisable">批量禁用</el-button>
+                </el-row>
+                <el-table size="small" ref="multipleTableRef" :data="tableData" :max-height="500" style="width: 100%;"
                     @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55" />
                     <el-table-column label="姓名" width="130">
                         <template #default="scope">{{ scope.row.guardName }}</template>
                     </el-table-column>
-                    <el-table-column property="phone" label="电话" width="130" />
-                    <el-table-column property="company" label="公司" width="160" />
-                    <el-table-column property="master" label="是否为队长" width="90">
+                    <el-table-column property="phone" label="电话" width="140" />
+                    <el-table-column property="company" label="公司" width="170" />
+                    <el-table-column property="master" label="是否为队长" width="120">
                         <template #default="scope">
                             <el-tag v-if="scope.row.master === '是' && scope.row.state !== 1" type="success">是</el-tag>
                             <el-tag v-else type="danger">否</el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column property="state" label="状态" width="90">
+                    <el-table-column property="state" label="状态" width="140">
                         <template #default="scope">
                             <el-tag v-if="scope.row.state === 0" type="success">已通过</el-tag>
                             <el-tag v-else-if="scope.row.state === 1" type="danger">已禁用</el-tag>
@@ -146,7 +149,7 @@ import { ElTable } from 'element-plus'
 
 interface User {
     type?: number,
-    id?: number,
+    id?: any,
     guardName?: string,
     phone?: string,
     company?: string,
@@ -165,6 +168,11 @@ const guardForm = ref<User>({
     "cid": null,
     "master": "否",
     "state": null
+})
+
+const allowData = ref({
+    review : true,
+    disable :false
 })
 
 const currentPage4 = ref(1)
@@ -186,13 +194,13 @@ const states = [
 
 
 const limitData = ref<any>({
-    name: '',
-    phone: '',
-    company: '',
+    name: null,
+    phone: null,
+    company: null,
     state: null
 })
 
-import { groupGetService, groupUpdateService, groupCreateService, guardCreateService, guardGetService, guardReviewService, guardUpdateService, guardrePassService } from "@/api/user.ts";
+import { groupGetService, groupUpdateService, groupCreateService, guardCreateService, guardGetService, guardReviewService, guardUpdateService, guardrePassService, guardDeletedService, guardbatchAllowedService } from "@/api/user.ts";
 
 const groupData = ref<any[]>([]);
 
@@ -206,10 +214,14 @@ const getGuard = async () => {
 
     const parmas = new URLSearchParams();
     parmas.append("curren", currentPage4.value.toString())
-    parmas.append("guardName", limitData.value.name)
-    parmas.append("phone", limitData.value.phone)
-    parmas.append("company", limitData.value.company)
-    parmas.append("state", limitData.value.state)
+    if (limitData.value.name)
+        parmas.append("guardName", limitData.value.name)
+    if (limitData.value.phone)
+        parmas.append("phone", limitData.value.phone)
+    if (limitData.value.company)
+        parmas.append("company", limitData.value.company)
+    if (limitData.value.state || limitData.value.state == 0)
+        parmas.append("state", limitData.value.state)
     const result = await guardGetService(parmas);
 
     tableData.value = result.data.items;
@@ -254,6 +266,7 @@ const handleCurrentChange = (val: number) => {
 
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { Action } from 'element-plus'
+import { it } from 'node:test';
 
 const reviewFun = (row: any) => {
     if (row.state === 2) {
@@ -332,7 +345,7 @@ const rePassword = (row: any) => {
                 const parmas = new URLSearchParams();
                 parmas.append("id", row.id);
                 const result = await guardrePassService(parmas)
-                ElMessageBox.alert(row.guardName + "的用户密码为：\n"+result.data, '新密码', {
+                ElMessageBox.alert(row.guardName + "的用户密码为：\n" + result.data, '新密码', {
                     confirmButtonText: '确定',
                     callback: async (action: Action) => {
                         ElMessage.info('请妥善保管')
@@ -413,7 +426,57 @@ const updateGuard = async () => {
 }
 
 const delectGuard = async () => {
+    const parmas = new URLSearchParams();
+    parmas.append("id", guardForm.value.id.toString())
+    const result = await guardDeletedService(parmas);
+    ElMessage.success(result.data ? result.data : '删除保安成功')
+    getGuard()
+    visibleDrawer.value = false
+}
 
+const batchCheck = async () => {
+
+    let names = ' <br>'
+    multipleSelection.value.forEach(item => {
+        console.log(item);
+        names += item.guardName + ' '
+    })
+
+    ElMessageBox.alert('确定要批量审核' + names + "吗？", '批量审核', {
+        // if you want to disable its autofocus
+        // autofocus: false,
+        confirmButtonText: '确定',
+        callback: async (action: Action) => {
+            if (action === 'confirm') {
+                const result = await guardbatchAllowedService(multipleSelection.value)
+                console.log(result);
+                let message: string = '操作成功！操作总数:' + result.data.total + "操作成功:" + result.data.success + "<br>";
+                if (result.data.error > 0) {
+                    result.data.stringList.forEach((item: any) => {
+                        message += "失败:" + item + "<br>";
+                    })
+                }
+                getGuard()
+                ElMessageBox.alert(message, '提示', {
+                    confirmButtonText: '确定',
+                    callback: () => {
+                        console.log('取消')
+                    },
+                    dangerouslyUseHTMLString: true,
+                })
+            } else {
+                ElMessage.info('已取消操作')
+            }
+        },
+        dangerouslyUseHTMLString: true,
+    })
+
+
+
+
+}
+
+const batchDisable = async ()=> {
 }
 </script>
 

@@ -1,4 +1,5 @@
-import './assets/main.less'
+import '@/assets/main.less'
+
 
 import { DefineComponent, createApp } from 'vue'
 import { createPinia } from 'pinia'

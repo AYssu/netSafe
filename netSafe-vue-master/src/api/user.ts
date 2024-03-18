@@ -44,8 +44,6 @@ export const guardReviewService = (params: any) => {
 }
 
 //更新保安信息
-
-
 export const guardUpdateService = (params: any) => {
   return request.post('/admin/updateGuard', params)
 }
@@ -60,3 +58,16 @@ export const adminUpdateService = (params: any) => {
   return request.post('/admin/updateAdmin', params)
 }
 
+
+
+//删除用户
+export const guardDeletedService = (params: any) => {
+  return request.post('/admin/deletedGuard', params)
+}
+
+
+//批量审核
+
+export const guardbatchAllowedService = (params: any) => {
+  return request.post('/admin/batchAllowedGuards', params)
+}
