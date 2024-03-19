@@ -1,8 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-const a = ref(1);
+import MapLayout from './MapLayout.vue';
+import MethodLayout from './MethodLayout.vue';
 </script>
 
 <template>
-    <h1>第一个界面</h1>
+<div class="map-main">
+    <MapLayout class="overLayout"/>
+    <MethodLayout class="overLayout"/>
+</div>
 </template>
+
+<style scoped>
+.map-main {
+    width: 100%;
+    height: 800px;
+    position: relative;
+
+    .overLayout {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}
+</style>

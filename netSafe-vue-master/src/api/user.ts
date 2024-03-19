@@ -71,3 +71,9 @@ export const guardDeletedService = (params: any) => {
 export const guardbatchAllowedService = (params: any) => {
   return request.post('/admin/batchAllowedGuards', params)
 }
+
+//批量禁用
+
+export const guardbatchDisabledService = (params: any) => {
+  return request.post('/admin/batchDisabledGuards', params)
+}

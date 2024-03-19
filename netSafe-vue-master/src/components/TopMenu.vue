@@ -114,7 +114,6 @@ const getAdminInfo = async () => {
     adminInfo.value.adminname = user.info.adminname
     adminInfo.value.email = user.info.email
     adminInfo.value.content = user.info.content
-    console.log(user.info);
     
 }
 

@@ -19,4 +19,7 @@ import TopMenu from '@/components/TopMenu.vue'
         --el-header-padding: 0;
     }
 }
+.el-main {
+    padding: 0;
+}
 </style>

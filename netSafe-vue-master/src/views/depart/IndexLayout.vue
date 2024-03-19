@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </el-card>
-            <el-card class="box-card" style="width: calc(100vw - 400px)">
+            <el-card class="box-card" style="width: calc(100vw - 370px);">
                 <template #header>
                     <div class="card-header">
                         <div class="left-icon"></div>
@@ -59,13 +59,15 @@
                     </div>
                 </div>
                 <el-row style="margin: 10px 0;">
-                    <el-button type="success" size="small" @click="batchCheck" :disabled="allowData.review">批量审核</el-button>
-                    <el-button type="danger" size="small" @click="batchDisable">批量禁用</el-button>
+                    <el-button type="success" size="small" @click="batchCheck"
+                        :disabled="allowData.review">批量审核</el-button>
+                    <el-button type="danger" size="small" @click="batchDisable"
+                        :disabled="allowData.disable">批量禁用</el-button>
                 </el-row>
                 <el-table size="small" ref="multipleTableRef" :data="tableData" :max-height="500" style="width: 100%;"
                     @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55" />
-                    <el-table-column label="姓名" width="130">
+                    <el-table-column fixed="left" label="姓名" width="70">
                         <template #default="scope">{{ scope.row.guardName }}</template>
                     </el-table-column>
                     <el-table-column property="phone" label="电话" width="140" />
@@ -84,13 +86,16 @@
                         </template>
                     </el-table-column>
                     <el-table-column property="createTime" label="注册时间" width="180" />
-                    <el-table-column fixed="right" label="操作" width="160">
+                    <el-table-column fixed="right" label="操作" width="220">
                         <template #default="{ row }">
                             <div class="fun-list">
                                 <span @click="reviewFun(row)">审核</span>
-                                <span @click="disableFun(row)">禁用</span>
+                                <span @click="disableFun(row)">{{ row.state == 1 ? '启用' : '禁用' }}</span>
                                 <span @click="handleEdit(row)">编辑</span>
                                 <span @click="rePassword(row)">重置密码</span>
+                                <span @click="delectGuard(row)">删除保安</span>
+
+
                             </div>
                         </template>
                     </el-table-column>
@@ -136,7 +141,6 @@
             <el-form-item>
                 <el-button v-if="guardForm.type == 1" type="primary" @click="addGuard">新增保安</el-button>
                 <el-button v-if="guardForm.type == 2" type="primary" @click="updateGuard">修改信息</el-button>
-                <el-button v-if="guardForm.type == 2" type="danger" @click="delectGuard">删除保安</el-button>
             </el-form-item>
         </el-form>
     </el-drawer>
@@ -171,8 +175,8 @@ const guardForm = ref<User>({
 })
 
 const allowData = ref({
-    review : true,
-    disable :false
+    review: true,
+    disable: true
 })
 
 const currentPage4 = ref(1)
@@ -182,16 +186,27 @@ const pageTotle = ref(100)
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const multipleSelection = ref<User[]>([])
 
+
 const handleSelectionChange = (val: User[]) => {
     multipleSelection.value = val
+    allowData.value.disable = true;
+    allowData.value.review = true;
+    multipleSelection.value.forEach((item) => {
+        if (item.state === 0 || item.state === 2) {
+            allowData.value.disable = false;
+        }
+        if (item.state === 2) {
+            allowData.value.review = false;
+        }
+    })
 }
+
 
 const states = [
     { label: '已通过', value: 0 },
     { label: '已禁用', value: 1 },
     { label: '待审核', value: 2 }
 ]
-
 
 const limitData = ref<any>({
     name: null,
@@ -200,7 +215,7 @@ const limitData = ref<any>({
     state: null
 })
 
-import { groupGetService, groupUpdateService, groupCreateService, guardCreateService, guardGetService, guardReviewService, guardUpdateService, guardrePassService, guardDeletedService, guardbatchAllowedService } from "@/api/user.ts";
+import { groupGetService, groupUpdateService, groupCreateService, guardCreateService, guardGetService, guardReviewService, guardUpdateService, guardrePassService, guardDeletedService, guardbatchAllowedService, guardbatchDisabledService } from "@/api/user.ts";
 
 const groupData = ref<any[]>([]);
 
@@ -211,7 +226,7 @@ const groupGet = async () => {
 }
 
 const getGuard = async () => {
-
+    
     const parmas = new URLSearchParams();
     parmas.append("curren", currentPage4.value.toString())
     if (limitData.value.name)
@@ -266,8 +281,6 @@ const handleCurrentChange = (val: number) => {
 
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { Action } from 'element-plus'
-import { it } from 'node:test';
-
 const reviewFun = (row: any) => {
     if (row.state === 2) {
         ElMessageBox.alert('确定要通过' + row.guardName + "的申请吗？", '通过申请', {
@@ -347,7 +360,7 @@ const rePassword = (row: any) => {
                 const result = await guardrePassService(parmas)
                 ElMessageBox.alert(row.guardName + "的用户密码为：\n" + result.data, '新密码', {
                     confirmButtonText: '确定',
-                    callback: async (action: Action) => {
+                    callback: async () => {
                         ElMessage.info('请妥善保管')
                     },
                 })
@@ -411,6 +424,7 @@ const addDepart = () => {
 }
 
 const addGuard = async () => {
+
     const result = await guardCreateService(guardForm.value)
     ElMessage.success(result.data ? result.data : '创建成功')
     getGuard()
@@ -425,13 +439,27 @@ const updateGuard = async () => {
     visibleDrawer.value = false
 }
 
-const delectGuard = async () => {
-    const parmas = new URLSearchParams();
-    parmas.append("id", guardForm.value.id.toString())
-    const result = await guardDeletedService(parmas);
-    ElMessage.success(result.data ? result.data : '删除保安成功')
-    getGuard()
-    visibleDrawer.value = false
+const delectGuard = async (row) => {
+
+
+    ElMessageBox.alert('确定要删除' + row.guardName + "吗？", '删除保安', {
+        // if you want to disable its autofocus
+        // autofocus: false,
+        confirmButtonText: '确定',
+        callback: async (action: Action) => {
+            if (action === 'confirm') {
+                const parmas = new URLSearchParams();
+                parmas.append("id", row.id.toString())
+                const result = await guardDeletedService(parmas);
+                ElMessage.success(result.data ? result.data : '删除保安成功')
+                getGuard()
+            } else {
+                ElMessage.info('已取消操作')
+            }
+
+        },
+    })
+
 }
 
 const batchCheck = async () => {
@@ -476,17 +504,53 @@ const batchCheck = async () => {
 
 }
 
-const batchDisable = async ()=> {
+const batchDisable = async () => {
+
+    let names = ' <br>'
+    multipleSelection.value.forEach(item => {
+        console.log(item);
+        names += item.guardName + ' '
+    })
+
+    ElMessageBox.alert('确定要批量禁用' + names + "吗？", '批量禁用', {
+        // if you want to disable its autofocus
+        // autofocus: false,
+        confirmButtonText: '确定',
+        callback: async (action: Action) => {
+            if (action === 'confirm') {
+                const result = await guardbatchDisabledService(multipleSelection.value)
+                console.log(result);
+                let message: string = '操作成功！操作总数:' + result.data.total + "操作成功:" + result.data.success + "<br>";
+                if (result.data.error > 0) {
+                    result.data.stringList.forEach((item: any) => {
+                        message += "失败:" + item + "<br>";
+                    })
+                }
+                getGuard()
+                ElMessageBox.alert(message, '提示', {
+                    confirmButtonText: '确定',
+                    callback: () => {
+                        console.log('取消')
+                    },
+                    dangerouslyUseHTMLString: true,
+                })
+            } else {
+                ElMessage.info('已取消操作')
+            }
+        },
+        dangerouslyUseHTMLString: true,
+    })
+
+
 }
 </script>
 
 <style lang="less">
 .depart-main {
-    height: calc(100vh - 100px);
-    padding: 0;
+    margin: 5px 1px;
 
     .box-card {
-        height: calc(100vh - 100px);
+        height: calc(100vh - 110px);
 
         .card-header {
             display: flex;
