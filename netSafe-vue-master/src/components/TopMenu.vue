@@ -142,22 +142,22 @@ const menus = reactive(
         {
             id: 1,
             title: "指挥调度",
-            path: "command",
+            path: "/index/command",
             icon: commandIcon,
         }, {
             id: 2,
             title: "组织架构",
-            path: "depart",
+            path: "/index/depart",
             icon: departIcon,
         }, {
             id: 3,
             title: "广播系统",
-            path: "notice",
+            path: "/index/notice",
             icon: noticeIcon,
         }, {
             id: 4,
             title: "大屏数据",
-            path: "screen",
+            path: "/index/screen",
             icon: screenIcon,
         },
     ]

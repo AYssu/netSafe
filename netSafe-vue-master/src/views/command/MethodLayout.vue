@@ -1,10 +1,11 @@
 <template>
-    <el-card style="max-width: 480px">
-        <el-input v-model="filterText" style="width: 240px" placeholder="Filter keyword" />
-
-        <el-tree ref="treeRef" style="max-width: 600px" class="filter-tree" :data="data" :props="defaultProps"
-            default-expand-all :filter-node-method="filterNode" />
-    </el-card>
+    <div class="method-layout">
+        <el-card class="box-card" style="max-width: 480px">
+            <el-input v-model="filterText" style="width: 240px" placeholder="Filter keyword" />
+            <el-tree ref="treeRef" style="max-width: 600px" class="filter-tree" :data="data" :props="defaultProps"
+                default-expand-all :filter-node-method="filterNode" />
+        </el-card>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -85,4 +86,12 @@ const data: Tree[] = [
     },
 ]
 </script>
-<style scoped></style>
+<style scoped>
+.method-layout {
+    .box-card {
+        margin-left: 20px;
+        margin-top: 20px;
+        height: calc(100vh - 100px);
+    }
+}
+</style>

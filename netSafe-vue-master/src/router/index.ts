@@ -38,7 +38,50 @@ const router = createRouter({
         {
           path: 'screen',
           name: 'screen',
-          component: () => import('@/views/screen/IndexLayout.vue')
+          redirect: {name:'oneQuestion'},
+          component: () => import('@/views/screen/IndexLayout.vue'),
+          children: [
+            {
+              path: 'oneQuestion',
+              name: 'oneQuestion',
+              component: () => import('@/views/screen/oneQuestion.vue')
+            },
+            {
+              path: 'ploceTrain',
+              name: 'ploceTrain',
+              component: () => import('@/views/screen/ploceTrain.vue')
+            },
+            {
+              path: 'invesTigation',
+              name: 'invesTigation',
+              component: () => import('@/views/screen/invesTigation.vue')
+            },
+            {
+              path: 'policeOffice',
+              name: 'policeOffice',
+              component: () => import('@/views/screen/policeOffice.vue')
+            },
+            {
+              path: 'jointProblems',
+              name: 'jointProblems',
+              component: () => import('@/views/screen/jointProblems.vue')
+            },
+            {
+              path: 'policeLogistics',
+              name: 'policeLogistics',
+              component: () => import('@/views/screen/policeLogistics.vue')
+            },
+            {
+              path: 'ondutyToday',
+              name: 'ondutyToday',
+              component: () => import('@/views/screen/ondutyToday.vue')
+            },
+            {
+              path: 'threeMentions',
+              name: 'threeMentions',
+              component: () => import('@/views/screen/threeMentions.vue')
+            }
+          ]
         },
         {
           name: "redirect2",
