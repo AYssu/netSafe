@@ -11,7 +11,7 @@ const router = createRouter({
       component: LoginLayoutView
     },
     {
-      name: "redirect",
+      name: 'redirect',
       path: '/',
       redirect: { name: 'login' }
     },
@@ -38,7 +38,7 @@ const router = createRouter({
         {
           path: 'screen',
           name: 'screen',
-          redirect: {name:'oneQuestion'},
+          redirect: { name: 'oneQuestion' },
           component: () => import('@/views/screen/IndexLayout.vue'),
           children: [
             {
@@ -84,7 +84,7 @@ const router = createRouter({
           ]
         },
         {
-          name: "redirect2",
+          name: 'redirect2',
           path: '', // 空字符串代表父路由的根路径
           redirect: { name: 'command' }
         }

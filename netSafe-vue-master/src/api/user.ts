@@ -58,13 +58,10 @@ export const adminUpdateService = (params: any) => {
   return request.post('/admin/updateAdmin', params)
 }
 
-
-
 //删除用户
 export const guardDeletedService = (params: any) => {
   return request.post('/admin/deletedGuard', params)
 }
-
 
 //批量审核
 
@@ -76,4 +73,27 @@ export const guardbatchAllowedService = (params: any) => {
 
 export const guardbatchDisabledService = (params: any) => {
   return request.post('/admin/batchDisabledGuards', params)
+}
+
+//添加问题
+
+export const questionAddService = (params: any) => {
+  return request.post('/admin/addQuestion', params)
+}
+
+//更新问题
+
+export const questionUpdateService = (params: any) => {
+  return request.post('/admin/updateQuestion', params)
+}
+
+//删除问题
+export const questionDeletedService = (params: any) => {
+  return request.post('/admin/deletedQuestion', params)
+}
+
+//获取问题
+
+export const questionGetService = () => {
+  return request.get('/admin/getQuestion')
 }

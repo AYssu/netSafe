@@ -1,25 +1,25 @@
 <template>
-    <el-container class="index-layout">
-        <el-header>
-            <TopMenu />
-        </el-header>
-        <el-main>
-            <router-view></router-view>
-        </el-main>
-    </el-container>
+  <el-container class="index-layout">
+    <el-header>
+      <TopMenu />
+    </el-header>
+    <el-main>
+      <router-view></router-view>
+    </el-main>
+  </el-container>
 </template>
 
 <script setup>
 import TopMenu from '@/components/TopMenu.vue'
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .index-layout {
-    .el-header {
-        --el-header-padding: 0;
-    }
+  .el-header {
+    --el-header-padding: 0;
+  }
 }
 .el-main {
-    padding: 0;
+  padding: 0;
 }
 </style>

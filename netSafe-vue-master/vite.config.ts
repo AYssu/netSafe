@@ -3,7 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-
+import postcss from 'postcss-px2rem'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -22,5 +22,15 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/,'')
       }
     }
-  }
+  },
+  css: {
+    postcss: {
+      plugins: [
+        postcss({
+          remUnit: 160 // 设计图给的375的图就写37.5，也就是1rem=37.5px
+        })
+      ]
+    }
+},
+
 })
